@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -68,4 +69,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     val nav_version = "2.8.8"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("androidx.compose.ui:ui:1.4.0") // or the latest version
+    implementation("androidx.compose.material3:material3:1.0.0") // Ensure you're using Material3 for `Icons.Filled`
+    implementation("androidx.compose.material:material-icons-extended:1.4.0") // Add this line if you're using Icons from the Material Icons library
 }

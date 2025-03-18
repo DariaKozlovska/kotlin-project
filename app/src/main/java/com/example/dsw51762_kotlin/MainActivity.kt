@@ -9,7 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.dsw51762_kotlin.utils.Routes
 import com.example.dsw51762_kotlin.view.LoginPage
-import com.example.dsw51762_kotlin.view.RegisterPage
+import com.example.testapp.views.RegisterPage
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

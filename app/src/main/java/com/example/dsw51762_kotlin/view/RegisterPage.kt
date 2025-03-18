@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun RegisterPage(){
 
-    var email by remember { mutableStateOf("") }
+//    var email by remember { mutableStateOf("") }
 
     Column (
         modifier = Modifier.fillMaxSize(),
