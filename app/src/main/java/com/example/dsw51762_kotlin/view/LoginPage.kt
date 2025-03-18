@@ -1,11 +1,17 @@
 package com.example.dsw51762_kotlin.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -31,6 +37,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import com.example.testapp.utils.CustomTextField
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.Color
+import com.example.dsw51762_kotlin.ui.theme.LightPurple
+import com.example.dsw51762_kotlin.ui.theme.Pink
 
 
 @Composable
@@ -93,10 +105,115 @@ fun LoginPage(navController: NavController){
                 onTrailingIconClick = { passwordVisible = !passwordVisible },
                 keyboardType = KeyboardType.Password
             )
-            Button(onClick = { navController.navigate(Routes.registerPage)}) {
-                Text(text = "Sing in")
+
+            Text(
+                "Forget Password?",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.W700,
+                color = DarkPurple,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .clickable {
+                    // TODO: navigation to one of the pages
+                }
+            )
+
+            Button(
+                onClick = { navController.navigate(Routes.registerPage)},
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Pink,    // Button background color
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(16.dp)
+            )
+            {
+                Text(text = "Sing in", fontSize = 18.sp, fontWeight = FontWeight.W700)
+            }
+
+            Text(
+                "Or sign in With",
+                fontSize = 18.sp,
+                color = DarkPurple,
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 20.dp)
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ){
+                ElevatedButton(
+                    onClick = {
+//                    TODO: Idk if its needed
+                    },
+                    modifier = Modifier.height(50.dp).width(50.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Image(
+                        painterResource(R.drawable.google_icon),
+                        contentDescription = "Google icon",
+                        modifier = Modifier.size(30.dp),
+                    )
+                }
+                ElevatedButton(
+                    onClick = {
+//                    TODO: Idk if its needed
+                    },
+                    modifier = Modifier.height(50.dp).width(50.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Image(
+                        painterResource(R.drawable.fb_icon),
+                        contentDescription = "FB icon",
+                        modifier = Modifier.size(30.dp),
+                    )
+                }
+                ElevatedButton(
+                    onClick = {
+//                    TODO: Idk if its needed
+                    },
+                    modifier = Modifier.height(50.dp).width(50.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Image(
+                        painterResource(R.drawable.x_icon),
+                        contentDescription = "X icon",
+                        modifier = Modifier.size(30.dp),
+                    )
+                }
+                ElevatedButton(
+                    onClick = {
+//                    TODO: Idk if its needed
+                    },
+                    modifier = Modifier.height(50.dp).width(50.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Image(
+                        painterResource(R.drawable.in_icon),
+                        contentDescription = "In icon",
+                        modifier = Modifier.size(30.dp),
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
+                horizontalArrangement = Arrangement.Center,
+            )
+            {
+                Text(
+                    "Don't have an account?",
+                    modifier = Modifier,
+                    color = DarkPurple,
+                    fontSize = 16.sp
+                )
+                Text(
+                    "Sing up",
+                    modifier = Modifier.clickable { /*TODO: navigation to register page*/ },
+                    color = DarkPurple,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W700
+                )
             }
         }
-
     }
 }
