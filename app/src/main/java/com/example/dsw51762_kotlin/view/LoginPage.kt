@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,6 +42,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.Navigation
 import com.example.dsw51762_kotlin.ui.theme.LightPurple
 import com.example.dsw51762_kotlin.ui.theme.Pink
 
@@ -139,7 +141,7 @@ fun LoginPage(navController: NavController){
             )
 
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 50.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ){
                 ElevatedButton(
@@ -147,12 +149,13 @@ fun LoginPage(navController: NavController){
 //                    TODO: Idk if its needed
                     },
                     modifier = Modifier.height(50.dp).width(50.dp),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues(10.dp),
                 ) {
                     Image(
                         painterResource(R.drawable.google_icon),
                         contentDescription = "Google icon",
-                        modifier = Modifier.size(30.dp),
+                        modifier = Modifier.size(40.dp),
                     )
                 }
                 ElevatedButton(
@@ -160,12 +163,13 @@ fun LoginPage(navController: NavController){
 //                    TODO: Idk if its needed
                     },
                     modifier = Modifier.height(50.dp).width(50.dp),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues(10.dp),
                 ) {
                     Image(
                         painterResource(R.drawable.fb_icon),
                         contentDescription = "FB icon",
-                        modifier = Modifier.size(30.dp),
+                        modifier = Modifier.size(40.dp),
                     )
                 }
                 ElevatedButton(
@@ -173,12 +177,13 @@ fun LoginPage(navController: NavController){
 //                    TODO: Idk if its needed
                     },
                     modifier = Modifier.height(50.dp).width(50.dp),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues(10.dp),
                 ) {
                     Image(
                         painterResource(R.drawable.x_icon),
                         contentDescription = "X icon",
-                        modifier = Modifier.size(30.dp),
+                        modifier = Modifier.size(40.dp),
                     )
                 }
                 ElevatedButton(
@@ -186,12 +191,13 @@ fun LoginPage(navController: NavController){
 //                    TODO: Idk if its needed
                     },
                     modifier = Modifier.height(50.dp).width(50.dp),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues(10.dp),
                 ) {
                     Image(
                         painterResource(R.drawable.in_icon),
                         contentDescription = "In icon",
-                        modifier = Modifier.size(30.dp),
+                        modifier = Modifier.size(40.dp),
                     )
                 }
             }
@@ -201,14 +207,14 @@ fun LoginPage(navController: NavController){
             )
             {
                 Text(
-                    "Don't have an account?",
+                    "Don't have an account? ",
                     modifier = Modifier,
                     color = DarkPurple,
                     fontSize = 16.sp
                 )
                 Text(
                     "Sing up",
-                    modifier = Modifier.clickable { /*TODO: navigation to register page*/ },
+                    modifier = Modifier.clickable { navController.navigate(Routes.registerPage) },
                     color = DarkPurple,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W700
