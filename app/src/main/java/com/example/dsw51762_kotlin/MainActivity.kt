@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     LoginPage(navController)
                 }
                 composable(Routes.registerPage){
-                    RegisterPage()
+                    RegisterPage(navController)
                 }
             })
         }

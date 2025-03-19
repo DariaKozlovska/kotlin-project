@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.dsw51762_kotlin.ui.theme.DarkPurple
 import com.example.dsw51762_kotlin.ui.theme.LightPurple
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,6 +54,7 @@ fun CustomTextField(
             disabledContainerColor = Color.Transparent,
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
+
         ),
         value = value,
         onValueChange = onValueChange,
@@ -62,7 +64,8 @@ fun CustomTextField(
             if (leadingIcon != null)
                 Icon(
                     modifier = Modifier.size(30.dp),
-                    painter = leadingIcon, contentDescription = null
+                    painter = leadingIcon, contentDescription = null,
+                    tint = Color.Unspecified
                 )
         },
         trailingIcon = {
@@ -70,7 +73,8 @@ fun CustomTextField(
                 IconButton(onClick = onTrailingIconClick) {
                     Icon(
                         modifier = Modifier.size(24.dp),
-                        imageVector = trailingIcon, contentDescription = null
+                        imageVector = trailingIcon, contentDescription = null,
+                        tint = DarkPurple
                     )
                 }
             }

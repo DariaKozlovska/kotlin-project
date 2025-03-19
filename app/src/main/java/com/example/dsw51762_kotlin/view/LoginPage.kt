@@ -210,13 +210,13 @@ fun LoginPage(navController: NavController){
                     "Don't have an account? ",
                     modifier = Modifier,
                     color = DarkPurple,
-                    fontSize = 16.sp
+                    fontSize = 18.sp
                 )
                 Text(
                     "Sing up",
                     modifier = Modifier.clickable { navController.navigate(Routes.registerPage) },
                     color = DarkPurple,
-                    fontSize = 16.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.W700
                 )
             }
