@@ -54,7 +54,6 @@ fun CustomTextField(
             disabledContainerColor = Color.Transparent,
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
-
         ),
         value = value,
         onValueChange = onValueChange,

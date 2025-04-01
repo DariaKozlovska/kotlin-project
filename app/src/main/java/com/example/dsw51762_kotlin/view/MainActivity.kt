@@ -1,4 +1,4 @@
-package com.example.dsw51762_kotlin
+package com.example.dsw51762_kotlin.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.dsw51762_kotlin.utils.Routes
-import com.example.dsw51762_kotlin.view.LoginPage
 import com.example.testapp.views.RegisterPage
 
 
@@ -18,7 +17,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = Routes.registerPage, builder = {
+            NavHost(navController = navController, startDestination = Routes.loginPage, builder = {
                 composable(Routes.loginPage){
                     LoginPage(navController)
                 }
