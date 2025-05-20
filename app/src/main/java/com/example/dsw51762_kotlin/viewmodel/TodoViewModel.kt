@@ -15,9 +15,17 @@ class TodoViewModel : ViewModel() {
 
     val todoList : LiveData<List<Todo>> = todoDao.getAllTodo()
 
-    fun addTodo(title : String){
-        viewModelScope.launch(Dispatchers.IO){
-            todoDao.addTodo(Todo(title = title, createdAt = Date.from(Instant.now())))
+    fun addTodo(title: String, content: String, password: String?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            todoDao.addTodo(
+                Todo(
+                    title = title,
+                    content = content,
+                    createdAt = Date.from(Instant.now()),
+                    isLocked = !password.isNullOrBlank(),
+                    password = password
+                )
+            )
         }
     }
 
@@ -26,4 +34,15 @@ class TodoViewModel : ViewModel() {
             todoDao.deleteTodo(id)
         }
     }
+
+    fun getTodoById(id: Int): LiveData<Todo> {
+        return todoDao.getTodoById(id)
+    }
+
+    fun updateTodo(todo: Todo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            todoDao.updateTodo(todo)
+        }
+    }
+
 }

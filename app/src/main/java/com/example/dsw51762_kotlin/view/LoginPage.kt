@@ -47,8 +47,9 @@ import com.example.dsw51762_kotlin.ui.theme.LightPurple
 import com.example.dsw51762_kotlin.ui.theme.Pink
 
 
+
 @Composable
-fun LoginPage(navController: NavController){
+fun LoginPage(navController: NavController, onLoginSuccess: () -> Unit) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -120,17 +121,37 @@ fun LoginPage(navController: NavController){
                 }
             )
 
+            var errorMessage by remember { mutableStateOf<String?>(null) }
+
             Button(
-                onClick = { navController.navigate(Routes.registerPage)},
-                modifier = Modifier.fillMaxWidth().height(50.dp),
+                onClick = {
+                    if (email == "admin" && password == "Admin1") {
+                        errorMessage = null
+                        navController.navigate(Routes.homePage)
+                        onLoginSuccess()
+                    } else {
+                        errorMessage = "Nieprawidłowy login lub hasło"
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Pink,    // Button background color
+                    containerColor = Pink,
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(16.dp)
-            )
-            {
-                Text(text = "Sing in", fontSize = 18.sp, fontWeight = FontWeight.W700)
+            ) {
+                Text(text = "Sign in", fontSize = 18.sp, fontWeight = FontWeight.W700)
+            }
+
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage!!,
+                    color = Color.Red,
+                    fontSize = 16.sp,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
 
             Text(

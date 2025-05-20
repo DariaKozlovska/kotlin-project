@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.dsw51762_kotlin.model.Todo
 
 @Dao
@@ -13,6 +14,12 @@ interface TodoDao{
 
     @Insert
     fun addTodo(todo: Todo)
+
+    @Query("SELECT * FROM todo WHERE id = :id LIMIT 1")
+    fun getTodoById(id: Int): LiveData<Todo>
+
+    @Update
+    suspend fun updateTodo(todo: Todo)
 
     @Query("DELETE FROM Todo WHERE id = :id")
     fun deleteTodo(id : Int)

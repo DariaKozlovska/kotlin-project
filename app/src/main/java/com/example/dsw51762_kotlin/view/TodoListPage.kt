@@ -1,133 +1,97 @@
+package com.example.dsw51762_kotlin.view
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.dsw51762_kotlin.R
-import com.example.dsw51762_kotlin.viewmodel.TodoViewModel
-import com.example.dsw51762_kotlin.model.Todo
-import com.example.dsw51762_kotlin.ui.theme.DarkPurple
-import java.text.SimpleDateFormat
-import java.util.Locale
+import androidx.navigation.NavController
+import com.example.dsw51762_kotlin.utils.Routes
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoListPage(viewModel: TodoViewModel){
+fun TodoListPage(
+    navController: NavController,
+    onAddNote: (String, String, String?) -> Unit // dodaliśmy password jako String?
+) {
+    var title by remember { mutableStateOf("") }
+    var content by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var isLocked by remember { mutableStateOf(false) }
 
-    val todoList by viewModel.todoList.observeAsState()
-    var inputText by remember {
-        mutableStateOf("")
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(8.dp)
-    ) {
-
-        Row(
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Dodaj notatkę") }
+            )
+        }
+    ) { padding ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(padding)
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedTextField(
-                modifier= Modifier.weight(1f),
-                value = inputText,
+                value = title,
                 onValueChange = {
-                    inputText = it
-                })
-            Button(onClick = {
-                viewModel.addTodo(inputText)
-                inputText = ""
-            }) {
-                Text(text = "Add")
+                    if (it.length <= 40) title = it
+                },
+                label = { Text("Nazwa notatki") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = content,
+                onValueChange = { content = it },
+                label = { Text("Treść notatki") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp),
+                maxLines = 5
+            )
+
+            Row(
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Checkbox(
+                    checked = isLocked,
+                    onCheckedChange = { isLocked = it }
+                )
+                Text("Zablokuj notatkę hasłem")
             }
-        }
 
-        todoList?.let {
-            LazyColumn(
-                content = {
-                    itemsIndexed(it){index: Int, item: Todo ->
-                        TodoItem(item = item, onDelete = {
-                            viewModel.deleteTodo(item.id)
-                        })
+            if (isLocked) {
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("Hasło") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+            }
+
+            Button(
+                onClick = {
+                    if (title.isNotBlank() && content.isNotBlank()) {
+                        val pass = if (isLocked && password.isNotBlank()) password else null
+                        onAddNote(title, content, pass)
+                        title = ""
+                        content = ""
+                        password = ""
+                        isLocked = false
+                        navController.navigate(Routes.homePage) {
+                            popUpTo(Routes.todoListPage) { inclusive = true }
+                        }
                     }
-                }
-            )
-        }?: Text(
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            text = "No items yet",
-            fontSize = 16.sp
-        )
-
-
-    }
-
-}
-
-@Composable
-fun TodoItem(item : Todo, onDelete : ()-> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.primary)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-
-    ) {
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = SimpleDateFormat("HH:mm:aa, dd/mm", Locale.ENGLISH).format(item.createdAt),
-                fontSize = 12.sp,
-                color = Color.LightGray
-            )
-            Text(
-                text = item.title,
-                fontSize = 20.sp,
-                color = Color.White
-            )
-        }
-        IconButton(onClick = onDelete) {
-            Icon(
-                modifier = Modifier.size(20.dp),
-                imageVector = Icons.Filled.Delete,
-                contentDescription = null,
-                tint = DarkPurple
-            )
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Dodaj notatkę")
+            }
         }
     }
 }

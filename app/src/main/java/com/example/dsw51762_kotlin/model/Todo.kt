@@ -9,5 +9,8 @@ data class Todo (
     @PrimaryKey(autoGenerate = true)
     var id: Int=0,
     var title: String,
-    var createdAt: Date
+    val content: String,
+    var createdAt: Date,
+    var isLocked: Boolean = false,
+    var password: String? = null
 )
