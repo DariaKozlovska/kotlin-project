@@ -57,11 +57,11 @@ fun TodoListPage(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
+                Text("Zabezpiecz notatkę hasłem")
                 Checkbox(
                     checked = isLocked,
                     onCheckedChange = { isLocked = it }
                 )
-                Text("Zablokuj notatkę hasłem")
             }
 
             if (isLocked) {

@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,7 +21,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
 
     private val todoViewModel: TodoViewModel by viewModels()
 
@@ -82,6 +83,12 @@ fun SetupNavGraph(
                 todoViewModel.addTodo(title, content, password)
             }
         }
+
+//        composable(Routes.biometricLoginScreen) {
+//            BiometricLoginScreen(navController)
+//        }
+
+
         composable("view_note_page/{noteId}",
             arguments = listOf(navArgument("noteId") { type = NavType.IntType })
         ) { backStackEntry ->

@@ -1,68 +1,60 @@
 package com.example.dsw51762_kotlin.view
 
+import android.widget.Toast
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.biometric.BiometricPrompt.PromptInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import com.example.dsw51762_kotlin.R
 import com.example.dsw51762_kotlin.ui.theme.DarkPurple
-import com.example.dsw51762_kotlin.utils.Routes
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import com.example.testapp.utils.CustomTextField
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.Icon
-import androidx.compose.ui.graphics.Color
-import androidx.navigation.Navigation
-import com.example.dsw51762_kotlin.ui.theme.LightPurple
 import com.example.dsw51762_kotlin.ui.theme.Pink
-
-
+import com.example.dsw51762_kotlin.utils.Routes
+import com.example.testapp.utils.CustomTextField
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executor
 
 @Composable
 fun LoginPage(navController: NavController, onLoginSuccess: () -> Unit) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val activity = context as? FragmentActivity
+    val executor: Executor = ContextCompat.getMainExecutor(context)
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var text by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var showBiometricPrompt by remember { mutableStateOf(false) }
 
-    Column (
-        modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
-    )
-    {
+    ) {
         Image(
-            painterResource(R.drawable.logo),
+            painter = painterResource(R.drawable.logo),
             contentDescription = "logo",
             contentScale = ContentScale.Fit,
             modifier = Modifier
@@ -70,20 +62,13 @@ fun LoginPage(navController: NavController, onLoginSuccess: () -> Unit) {
                 .size(129.dp)
                 .align(Alignment.CenterHorizontally)
         )
-        Column (
-            verticalArrangement = Arrangement.spacedBy(30.dp)
-        )
-        {
-            Text("Sing in",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.W700,
-                color = DarkPurple,
-            )
+
+        Column(verticalArrangement = Arrangement.spacedBy(30.dp)) {
+            Text("Sign in", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = DarkPurple)
 
             CustomTextField(
                 value = email,
-                onValueChange = {email = it},
-                modifier = Modifier,
+                onValueChange = { email = it },
                 placeholder = "Email or User Name",
                 leadingIcon = painterResource(R.drawable.user_icon),
                 keyboardType = KeyboardType.Email
@@ -91,20 +76,11 @@ fun LoginPage(navController: NavController, onLoginSuccess: () -> Unit) {
 
             CustomTextField(
                 value = password,
-                onValueChange = {password = it},
-                modifier = Modifier,
+                onValueChange = { password = it },
                 placeholder = "Password",
                 leadingIcon = painterResource(R.drawable.lock_icon),
-                trailingIcon = if (passwordVisible) {
-                    Icons.Filled.Visibility // Eye icon for visible password
-                } else {
-                    Icons.Filled.VisibilityOff // Eye off icon for hidden password
-                },
-                visualTransformation = if (passwordVisible) {
-                    PasswordVisualTransformation() // Hide password
-                } else {
-                    VisualTransformation.None // Show password
-                },
+                trailingIcon = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                visualTransformation = if (passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
                 onTrailingIconClick = { passwordVisible = !passwordVisible },
                 keyboardType = KeyboardType.Password
             )
@@ -116,12 +92,8 @@ fun LoginPage(navController: NavController, onLoginSuccess: () -> Unit) {
                 color = DarkPurple,
                 modifier = Modifier
                     .align(Alignment.End)
-                    .clickable {
-                    // TODO: navigation to one of the pages
-                }
+                    .clickable { /* TODO */ }
             )
-
-            var errorMessage by remember { mutableStateOf<String?>(null) }
 
             Button(
                 onClick = {
@@ -130,28 +102,29 @@ fun LoginPage(navController: NavController, onLoginSuccess: () -> Unit) {
                         navController.navigate(Routes.homePage)
                         onLoginSuccess()
                     } else {
-                        errorMessage = "Nieprawidłowy login lub hasło"
+                        coroutineScope.launch {
+                            Toast.makeText(context, "Nieprawidłowy login lub hasło", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Pink,
-                    contentColor = Color.White
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = Pink),
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Text(text = "Sign in", fontSize = 18.sp, fontWeight = FontWeight.W700)
+                Text("Sign in", fontSize = 18.sp, fontWeight = FontWeight.W700, color = Color.White)
             }
 
-            if (errorMessage != null) {
-                Text(
-                    text = errorMessage!!,
-                    color = Color.Red,
-                    fontSize = 16.sp,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+            Button(
+                onClick = { showBiometricPrompt = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = DarkPurple)
+            ) {
+                Text("Zaloguj się biometrycznie", fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
             }
 
             Text(
@@ -223,7 +196,7 @@ fun LoginPage(navController: NavController, onLoginSuccess: () -> Unit) {
                 }
             }
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
                 horizontalArrangement = Arrangement.Center,
             )
             {
@@ -243,4 +216,52 @@ fun LoginPage(navController: NavController, onLoginSuccess: () -> Unit) {
             }
         }
     }
+
+    if (showBiometricPrompt && activity != null) {
+        val biometricManager = BiometricManager.from(context)
+        val canAuth = biometricManager.canAuthenticate(
+            BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        )
+
+        if (canAuth != BiometricManager.BIOMETRIC_SUCCESS) {
+            Toast.makeText(context, "Biometria niedostępna na tym urządzeniu", Toast.LENGTH_SHORT).show()
+            showBiometricPrompt = false
+        } else {
+            val promptInfo = PromptInfo.Builder()
+                .setTitle("Uwierzytelnianie biometryczne")
+                .setSubtitle("Zaloguj się za pomocą odcisku palca lub twarzy")
+                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                .build()
+
+            val biometricPrompt = BiometricPrompt(
+                activity,
+                executor,
+                object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        super.onAuthenticationSucceeded(result)
+                        navController.navigate(Routes.homePage) {
+                            popUpTo(Routes.loginPage) { inclusive = true }
+                        }
+                        onLoginSuccess()
+                    }
+
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                        super.onAuthenticationError(errorCode, errString)
+                        Toast.makeText(context, "Błąd: $errString", Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onAuthenticationFailed() {
+                        super.onAuthenticationFailed()
+                        Toast.makeText(context, "Autoryzacja nie powiodła się", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            )
+
+            LaunchedEffect(Unit) {
+                biometricPrompt.authenticate(promptInfo)
+                showBiometricPrompt = false
+            }
+        }
+    }
 }
+

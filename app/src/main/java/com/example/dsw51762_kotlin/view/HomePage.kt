@@ -41,7 +41,8 @@ enum class NoteFilter {
 fun HomePage(
     navController: NavController,
     viewModel: TodoViewModel,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onNoteClick: (Any?) -> Unit,
 ) {
     val todoList by viewModel.todoList.observeAsState(emptyList())
     var selectedFilter by remember { mutableStateOf(NoteFilter.ALL) }

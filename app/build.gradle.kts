@@ -80,5 +80,5 @@ dependencies {
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
-
+    implementation("androidx.biometric:biometric:1.1.0")
 }

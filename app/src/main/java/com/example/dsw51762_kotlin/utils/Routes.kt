@@ -7,4 +7,5 @@ object Routes {
     val homePage = "home_page"
     val viewNotePage = "view_note_page"
     val editNotePage = "edit_note_page"
+    val biometricLoginScreen = "biometric_login_screen"
 }
