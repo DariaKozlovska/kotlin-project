@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -23,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import com.example.dsw51762_kotlin.ui.theme.DarkPurple
 import com.example.dsw51762_kotlin.ui.theme.LightPurple
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTextField(
     modifier: Modifier = Modifier,
@@ -45,8 +43,8 @@ fun CustomTextField(
             .fillMaxWidth()
             .border(
                 width = 2.dp,
-                color = LightPurple, // Border color
-                shape = RoundedCornerShape(cornerRadius.dp) // Applying rounded corners
+                color = LightPurple,
+                shape = RoundedCornerShape(cornerRadius.dp)
             ),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,

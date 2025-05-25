@@ -1,17 +1,21 @@
 [versions]
 agp = "8.6.0"
-kotlin = "1.9.0"
+kotlin = "1.9.0" # Upewnij się, że jest kompatybilne z kotlinCompilerExtensionVersion
 coreKtx = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.8.0"
-composeBom = "2024.04.01"
-uiTestAndroid = "1.7.2"
+composeBom = "2024.04.01" # Upewnij się, że to jest aktualna wersja
+uiTestAndroid = "1.7.2" # Prawdopodobnie niepotrzebne, jeśli używasz composeBom i jego testowych zależności
 roomCommon = "2.6.1"
 roomKtx = "2.6.1"
-runtimeLivedata = "1.7.8"
+runtimeLivedata = "1.7.8" # Sprawdź, czy ta wersja jest potrzebna i aktualna
+firebase-bom = "32.8.1" # Użyj najnowszej stabilnej wersji, np. 32.8.1
+
+# Dodaj wersję dla Material Icons, jeśli nie jest w Compose BOM
+materialIconsExtended = "1.6.7" # Przykładowa aktualna wersja dla Compose 1.6.x
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,7 +37,16 @@ androidx-room-common = { group = "androidx.room", name = "room-common", version.
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
+# Firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" } # Wersja zarządzana przez BOM
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx" } # Wersja zarządzana przez BOM
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx" } # Wersja zarządzana przez BOM
+
+# Dodaj Material Icons Extended, jeśli używasz ikon poza tymi w Material3 i nie są w BOM
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+google-services = { id = "com.google.gms.google-services", version = "4.4.1" }

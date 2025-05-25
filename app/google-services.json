@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "81060009910",
-    "project_id": "dsw51762-kotlin",
-    "storage_bucket": "dsw51762-kotlin.firebasestorage.app"
+    "project_number": "845120434004",
+    "project_id": "kotlin-app-d8de2",
+    "storage_bucket": "kotlin-app-d8de2.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:81060009910:android:0004d4532e9a2e2e721317",
+        "mobilesdk_app_id": "1:845120434004:android:31d8ade138ea828a3ce2c1",
         "android_client_info": {
           "package_name": "com.example.dsw51762_kotlin"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBMo5M_4uUbfCeAVEWoKunhJ6B1fB0z9bE"
+          "current_key": "AIzaSyAMVMz3TFNzGR9quq9j-MsDsIQU_r0ERbc"
         }
       ],
       "services": {

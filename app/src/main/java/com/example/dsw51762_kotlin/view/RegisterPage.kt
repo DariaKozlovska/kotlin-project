@@ -1,12 +1,8 @@
 package com.example.testapp.views
 
-import android.graphics.Point
-import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +17,6 @@ import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -31,12 +26,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -126,14 +118,14 @@ fun RegisterPage(navController: NavController){
                 placeholder = "Password",
                 leadingIcon = painterResource(R.drawable.lock_icon),
                 trailingIcon = if (passwordVisible) {
-                    Icons.Filled.Visibility // Eye icon for visible password
+                    Icons.Filled.Visibility
                 } else {
-                    Icons.Filled.VisibilityOff // Eye off icon for hidden password
+                    Icons.Filled.VisibilityOff
                 },
                 visualTransformation = if (passwordVisible) {
-                    PasswordVisualTransformation() // Hide password
+                    PasswordVisualTransformation()
                 } else {
-                    VisualTransformation.None // Show password
+                    VisualTransformation.None
                 },
                 onTrailingIconClick = { passwordVisible = !passwordVisible },
                 keyboardType = KeyboardType.Password,
@@ -144,14 +136,14 @@ fun RegisterPage(navController: NavController){
                 placeholder = "Confirm password",
                 leadingIcon = painterResource(R.drawable.lock_icon),
                 trailingIcon = if (confirmationVisible) {
-                    Icons.Filled.Visibility // Eye icon for visible password
+                    Icons.Filled.Visibility
                 } else {
-                    Icons.Filled.VisibilityOff // Eye off icon for hidden password
+                    Icons.Filled.VisibilityOff
                 },
                 visualTransformation = if (confirmationVisible) {
-                    PasswordVisualTransformation() // Hide password
+                    PasswordVisualTransformation()
                 } else {
-                    VisualTransformation.None // Show password
+                    VisualTransformation.None
                 },
                 onTrailingIconClick = { confirmationVisible = !confirmationVisible },
                 keyboardType = KeyboardType.Password,
@@ -163,7 +155,7 @@ fun RegisterPage(navController: NavController){
                 onClick = { navController.navigate(Routes.loginPage)},
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Pink,    // Button background color
+                    containerColor = Pink,
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(16.dp)

@@ -1,5 +1,6 @@
 package com.example.dsw51762_kotlin.view
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -42,15 +43,17 @@ fun HomePage(
     navController: NavController,
     viewModel: TodoViewModel,
     onLogout: () -> Unit,
-    onNoteClick: (Any?) -> Unit,
+//    onNoteClick: (Any?) -> Unit,
 ) {
     val todoList by viewModel.todoList.observeAsState(emptyList())
     var selectedFilter by remember { mutableStateOf(NoteFilter.ALL) }
 
-    val filteredList = when (selectedFilter) {
-        NoteFilter.ALL -> todoList
-        NoteFilter.UNLOCKED -> todoList.filter { !it.isLocked }
-        NoteFilter.LOCKED -> todoList.filter { it.isLocked }
+    val filteredList = remember(todoList, selectedFilter) {
+        when (selectedFilter) {
+            NoteFilter.ALL -> todoList
+            NoteFilter.UNLOCKED -> todoList.filter { !it.isLocked }
+            NoteFilter.LOCKED -> todoList.filter { it.isLocked }
+        }
     }
 
     Scaffold(
@@ -59,7 +62,6 @@ fun HomePage(
                 title = { Text("Notatki") },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate(Routes.loginPage)
                         onLogout()
                     }) {
                         Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = "Logout")
@@ -122,9 +124,14 @@ fun HomePage(
                 ) {
                     itemsIndexed(filteredList) { _, item ->
                         TodoItem(item = item, onDelete = {
-                            viewModel.deleteTodo(item.id)
+                            if (item.firebaseId.toString().isNotBlank()) {
+                                viewModel.deleteTodo(item.firebaseId.toString())
+                                Log.d("DELETE", "Deleting item with ID: ${item.firebaseId}")
+                            } else {
+                                Log.e("HomePage", "Cannot delete - invalid ID")
+                            }
                         }, onClick = {
-                            navController.navigate("view_note_page/${item.id}")
+                            navController.navigate("view_note_page/${item.firebaseId.toString()}")
                         })
                     }
                 }

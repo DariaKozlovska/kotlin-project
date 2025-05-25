@@ -2,7 +2,7 @@ package com.example.dsw51762_kotlin.view
 
 import android.content.Context
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -14,16 +14,28 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.dsw51762_kotlin.utils.Routes
-import com.example.dsw51762_kotlin.viewmodel.TodoViewModel
-import com.example.testapp.views.RegisterPage
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
+import com.example.dsw51762_kotlin.utils.Routes
+import com.example.dsw51762_kotlin.viewmodel.TodoViewModel
+import com.example.testapp.views.RegisterPage
+
+import com.example.dsw51762_kotlin.viewmodel.TodoViewModelFactory
+import com.example.dsw51762_kotlin.data.FirebaseTodoRepository
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : FragmentActivity() {
 
-    private val todoViewModel: TodoViewModel by viewModels()
+    private val firestoreInstance: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+
+    private val firebaseTodoRepository: FirebaseTodoRepository by lazy {
+        FirebaseTodoRepository(firestoreInstance)
+    }
+
+    private val todoViewModel: TodoViewModel by viewModels {
+        TodoViewModelFactory(firebaseTodoRepository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +84,6 @@ fun SetupNavGraph(
                     navController.navigate(Routes.loginPage) {
                         popUpTo(Routes.homePage) { inclusive = true }
                     }
-                },
-                onNoteClick = { id ->
-                    navController.navigate("${Routes.viewNotePage}/$id")
                 }
             )
         }
@@ -84,22 +93,27 @@ fun SetupNavGraph(
             }
         }
 
-//        composable(Routes.biometricLoginScreen) {
-//            BiometricLoginScreen(navController)
-//        }
-
-
         composable("view_note_page/{noteId}",
-            arguments = listOf(navArgument("noteId") { type = NavType.IntType })
+            arguments = listOf(navArgument("noteId") { type = NavType.StringType })
         ) { backStackEntry ->
-            val noteId = backStackEntry.arguments?.getInt("noteId") ?: -1
-            ViewNotePage(navController, todoViewModel, noteId)
+            val noteId = backStackEntry.arguments?.getString("noteId")
+            if (noteId != null && noteId.isNotBlank()) {
+                ViewNotePage(navController, todoViewModel, noteId)
+            } else {
+                Log.e("MainActivity", "noteId is null or blank in ViewNotePage: $noteId")
+                navController.popBackStack()
+            }
         }
 
-        composable("${Routes.editNotePage}/{noteId}") { backStackEntry ->
-            val noteId = backStackEntry.arguments?.getString("noteId")?.toIntOrNull()
-            if (noteId != null) {
+        composable("${Routes.editNotePage}/{noteId}",
+            arguments = listOf(navArgument("noteId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val noteId = backStackEntry.arguments?.getString("noteId")
+            if (noteId != null && noteId.isNotBlank()) {
                 EditNotePage(navController, todoViewModel, noteId)
+            } else {
+                Log.e("MainActivity", "noteId is null or blank in EditNotePage: $noteId")
+                navController.popBackStack()
             }
         }
     }

@@ -15,12 +15,12 @@ interface TodoDao{
     @Insert
     fun addTodo(todo: Todo)
 
-    @Query("SELECT * FROM todo WHERE id = :id LIMIT 1")
+    @Query("SELECT * FROM todo WHERE firebaseId = :id LIMIT 1")
     fun getTodoById(id: Int): LiveData<Todo>
 
     @Update
     suspend fun updateTodo(todo: Todo)
 
-    @Query("DELETE FROM Todo WHERE id = :id")
+    @Query("DELETE FROM Todo WHERE firebaseId = :id")
     fun deleteTodo(id : Int)
 }

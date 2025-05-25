@@ -12,7 +12,7 @@ import com.example.dsw51762_kotlin.utils.Routes
 @Composable
 fun TodoListPage(
     navController: NavController,
-    onAddNote: (String, String, String?) -> Unit // dodaliśmy password jako String?
+    onAddNote: (String, String, String?) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
